@@ -103,3 +103,21 @@ fit2_bart <- glm(type2_diab ~ SMK_CIG_EVER,
                  weights = IPTW_bart$weights,
                  data = tmle_data)
 tab_model(fit2_bart)
+
+
+# descriptive table
+library(tableone)
+
+# Define variables to summarize
+baseline_vars <- c("SDC_SEX", "SDC_AGE_CALC", "SDC_EDU_LEVEL", 
+                   "SDC_INCOME", "ALC_EVER", "DIS_DIAB_FAM_EVER")
+
+# Create factor versions if needed
+tmle_data$SMK_CIG_EVER <- factor(tmle_data$SMK_CIG_EVER, labels = c("Never", "Ever"))
+tmle_data$SDC_SEX <- factor(tmle_data$SDC_SEX, labels = c("Female", "Male"))
+tmle_data$ALC_EVER <- factor(tmle_data$ALC_EVER, labels = c("Never", "Ever"))
+tmle_data$DIS_DIAB_FAM_EVER <- factor(tmle_data$DIS_DIAB_FAM_EVER, labels = c("No", "Yes", "Presume No"))
+
+# Create Table 1 stratified by smoking
+table1 <- CreateTableOne(vars = baseline_vars, strata = "SMK_CIG_EVER", data = tmle_data)
+print(table1, showAllLevels = TRUE)

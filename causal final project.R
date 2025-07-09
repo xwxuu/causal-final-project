@@ -104,6 +104,13 @@ fit2_bart <- glm(type2_diab ~ SMK_CIG_EVER,
                  data = tmle_data)
 tab_model(fit2_bart)
 
+# weight diagnostic
+library(cobalt)
+
+bal.tab(IPTW_gbm) # For GBM
+bal.tab(IPTW_SL) # For SuperLearner
+bal.tab(IPTW_bart) # For BART
+
 
 # descriptive table
 library(tableone)
